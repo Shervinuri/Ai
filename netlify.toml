@@ -2,7 +2,7 @@
   publish = "."
 
 [[redirects]]
-  from = "/chat/*"
+  from = "https://chat.sharedchat.cn"
   to = "https://chat.sharedchat.cn/:splat"
   status = 200
   force = true
