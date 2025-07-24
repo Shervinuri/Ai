@@ -1,140 +1,259 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="fa">
 <head>
   <meta charset="UTF-8" />
-  <title>Loading...</title>
+  <title> root@Kali~ bridge
+    Connection...</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
   <style>
+    :root {
+      --background-color: #020402;
+      --main-green: #00ff41;
+      --dim-green: #00a029;
+      --gray-color: #aaaaaa;
+      --password-color: #ffd900; /* رنگ زرد برای پسورد */
+      --progress-bar-color: #00ff41;
+      --progress-bar-bg: #333333;
+      --glow-color: rgba(0, 255, 65, 0.5);
+      --error-color: #ff473d;
+      --error-glow: rgba(255, 71, 61, 0.7);
+      --font: 'Fira Code', 'Courier New', monospace;
+    }
+
     html, body {
-      margin: 0;
-      padding: 0;
-      height: 100vh;
-      width: 100vw;
+      margin: 0; padding: 0;
+      height: 100%; width: 100%;
       overflow: hidden;
-      background: #0a0a0a;
-      font-family: 'Segoe UI', monospace;
-      color: #f0f0f0;
-      display: flex;
-      justify-content: center;
-      align-items: center;
+      background-color: var(--background-color);
+      color: var(--main-green);
+      font-family: var(--font);
+      font-size: 15px;
+      text-shadow: 
+        0 0 1px var(--background-color),
+        0 0 3px var(--glow-color), 
+        0 0 8px var(--glow-color);
+      animation: text-flicker 4s linear infinite;
+    }
+    
+    body.fading-out {
+      opacity: 0 !important;
+      transition: opacity 0.5s ease-out;
     }
 
-    /* پترن ☬™ در پس‌زمینه با زاویه ۴۵ درجه */
     body::before {
-      content: "";
+      content: " ";
+      display: block;
       position: absolute;
-      top: -100%;
-      left: -100%;
-      width: 400%;
-      height: 400%;
-      background-image: repeating-linear-gradient(
-        45deg,
-        rgba(255, 255, 255, 0.015) 0,
-        rgba(255, 255, 255, 0.015) 1px,
-        transparent 1px,
-        transparent 20px
-      ),
-      repeating-linear-gradient(
-        45deg,
-        rgba(255, 255, 255, 0.015) 0,
-        rgba(255, 255, 255, 0.015) 1px,
-        transparent 1px,
-        transparent 20px
-      );
-      background-size: 20px 20px;
-      mask-image: radial-gradient(circle at center, white 20%, transparent 100%);
+      top: 0; left: 0; bottom: 0; right: 0;
+      background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%), linear-gradient(90deg, rgba(255, 0, 0, 0.06), rgba(0, 255, 0, 0.02), rgba(0, 0, 255, 0.06));
+      z-index: 2;
+      background-size: 100% 2.5px, 3px 100%;
       pointer-events: none;
-      z-index: 0;
-      animation: drift 40s linear infinite;
+      animation: scanline 10s linear infinite;
+    }
+    
+    @keyframes scanline {
+      0% { background-position: 0 0; }
+      100% { background-position: 0 -20px; }
+    }
+    
+    @keyframes text-flicker {
+      0%, 100% { opacity: 0.95; }
+      2% { opacity: 0.8; }
+      4% { opacity: 0.95; }
+      6% { opacity: 0.85; }
+      8% { opacity: 0.95; }
     }
 
-    @keyframes drift {
-      0% { transform: rotate(0deg) translate(0, 0); }
-      100% { transform: rotate(0deg) translate(-10%, -10%); }
-    }
-
-    .overlay {
+    #terminal {
+      padding: 1rem;
+      width: calc(100% - 2rem);
+      height: calc(100% - 2rem);
+      box-sizing: border-box;
+      white-space: pre-wrap;
+      overflow-y: hidden; /* Hide scrollbar for cleaner look */
       position: relative;
       z-index: 1;
-      text-align: center;
     }
 
-    .stage {
-      font-size: 1.8rem;
-      margin-bottom: 20px;
-      opacity: 0;
-      animation: fadeIn 1s ease forwards;
+    #terminal p { margin: 0.05em 0; }
+    
+    .title { color: var(--gray-color); text-shadow: none; font-weight: bold; }
+    .ok { color: var(--main-green); }
+    .info { color: var(--dim-green); text-shadow: none; }
+    .password { color: var(--password-color); font-weight: bold; }
+    .error { color: var(--error-color); text-shadow: 0 0 5px var(--error-glow); }
+    .progress-bar { color: var(--progress-bar-color); text-shadow: none; }
+
+    .cursor::after {
+      content: '█';
+      display: inline-block;
+      margin-left: 0.4rem;
+      background: var(--main-green);
+      animation: blink 0.7s step-end infinite;
     }
 
-    @keyframes fadeIn {
-      to { opacity: 1; }
-    }
-
-    .spinner {
-      font-size: 2rem;
-      margin-top: 10px;
-      animation: spinAnim 0.25s infinite;
-      letter-spacing: 0.3em;
-    }
-
-    @keyframes spinAnim {
-      0%   { content: "/"; }
-      25%  { content: "|"; }
-      50%  { content: "\\"; }
-      75%  { content: "|"; }
-    }
-
-    /* تغییر تدریجی پس‌زمینه به تیره سبز لجنی (رنگ سایت مقصد) */
-    @keyframes darkTransition {
-      0%   { background-color: #0a0a0a; }
-      100% { background-color: #1c1f1d; }
+    @keyframes blink {
+      50% { opacity: 0; }
     }
   </style>
 </head>
 <body>
-  <div class="overlay">
-    <div id="stage" class="stage">Initializing...</div>
-    <div id="spinner" class="spinner">/</div>
-  </div>
+
+  <div id="terminal"></div>
 
   <script>
-    const stage = document.getElementById('stage');
-    const spinner = document.getElementById('spinner');
-    const messages = [
-      "Loading...",
-      "Injecting JavaScript...",
-      "Connecting to proxy...",
-      "Establishing secure channel...",
-      "Connection established."
-    ];
+    const terminal = document.getElementById('terminal');
+    let tasks; // Moved declaration to be populated later
 
-    // اسپینر چرخشی شبیه ترمینال
-    const spinChars = ['/', '|', '\\', '|'];
-    let spinIndex = 0;
-    setInterval(() => {
-      spinner.textContent = spinChars[spinIndex++ % spinChars.length];
-    }, 100);
-
-    // نمایش مرحله‌ای جملات
-    let msgIndex = 0;
-    function nextMessage() {
-      if (msgIndex < messages.length) {
-        stage.style.opacity = 0;
-        setTimeout(() => {
-          stage.textContent = messages[msgIndex++];
-          stage.style.animation = "fadeIn 0.7s ease forwards";
-          setTimeout(nextMessage, 1500 + Math.random() * 500);
-        }, 300);
-      } else {
-        // تغییر نرم پس‌زمینه و ریدایرکت نهایی
-        document.body.style.animation = "darkTransition 3s forwards";
-        setTimeout(() => {
-          window.location.href = "https://chat.sharedchat.cn/";
-        }, 3200);
+    // تابع تولید پسورد امن
+    function generateSecurePassword() {
+      const upper = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+      const numbers = '0123456789';
+      const specials = '_';
+      let password = upper[Math.floor(Math.random() * upper.length)] +
+                     numbers[Math.floor(Math.random() * numbers.length)] +
+                     specials;
+      for (let i = 3; i < 8; i++) {
+        password += 'abcdefghijklmnopqrstuvwxyz0123456789'[Math.floor(Math.random() * 36)];
       }
+      return password.split('').sort(() => 0.5 - Math.random()).join('');
     }
 
-    setTimeout(nextMessage, 1000);
+    const generatedPassword = generateSecurePassword();
+    
+    // پر کردن لیست وظایف با پسورد تولید شده
+    tasks = [
+      { message: "Querying DNS for chat.sharedchat.cn", delay: 100 },
+      { message: "Target resolved to 104.21.55.194", delay: 50, informational: true },
+      { id: 'proxy_fetch', message: "Fetching Netlify proxy configuration", delay: 150 }, // مرحله خطای تصادفی
+      { message: "Negotiating Proxy: TLS_AES_256_GCM_SHA384", delay: 150 },
+      { message: "Verifying certificate chain (O=Cloudflare, Inc.)", delay: 120 },
+      { message: "Establishing secure HTTPS/2 tunnel", delay: 150 },
+      { message: "No active session found. Generating credentials...", delay: 100 },
+      { message: `↳ Injected password in js : <span class="password">${generatedPassword}</span>`, delay: 50, informational: true },
+      { message: "Exchanging auth token with proxy", delay: 150 },
+      { message: "Verifying packet integrity (SHA-384)", delay: 100 },
+      { message: "Gateway latency check... 37ms", delay: 50, informational: true },
+      { message: "Finalizing data stream", delay: 80 }
+    ];
+
+    const spinnerFrames = ['[    ]', '[=   ]', '[==  ]', '[=== ]', '[ ===]', '[  ==]', '[   =]', '[    ]'];
+    let taskCounter = 0;
+
+    const delay = ms => new Promise(resolve => setTimeout(resolve, ms));
+
+    async function typeText(element, text, speed = 1) { // Speed up typing
+        for (const char of text) {
+            element.textContent += char;
+            await delay(speed);
+        }
+    }
+    
+    function updateProgressBar() {
+        let progressBarElement = document.getElementById('progressBar');
+        if (!progressBarElement) {
+            progressBarElement = document.createElement('p');
+            progressBarElement.id = 'progressBar';
+            terminal.appendChild(progressBarElement);
+        }
+        
+        const totalActionableTasks = tasks.filter(t => !t.informational).length;
+        const progress = Math.min(1, taskCounter / totalActionableTasks);
+        const barWidth = 40;
+        const filledWidth = Math.round(barWidth * progress);
+        const emptyWidth = barWidth - filledWidth;
+        const bar = '█'.repeat(filledWidth) + '░'.repeat(emptyWidth);
+        progressBarElement.innerHTML = `<span class="info">> PROGRESS:</span> <span class="progress-bar">[${bar}]</span> <span class="info">${Math.round(progress * 100)}%</span>`;
+    }
+
+    async function runTask(task, randomErrorConfig) {
+        const line = document.createElement('p');
+        terminal.appendChild(line);
+        
+        if (task.informational) {
+            await delay(task.delay);
+            // سریعتر کردن تایپ برای خطوط اطلاعاتی
+            line.innerHTML = `> ${task.message}`;
+            terminal.scrollTop = terminal.scrollHeight;
+            return;
+        }
+
+        let spinnerInterval;
+        let frameIndex = 0;
+        const text = `> ${task.message}`;
+        spinnerInterval = setInterval(() => {
+            line.innerHTML = `<span class="info">${spinnerFrames[frameIndex++ % spinnerFrames.length]}</span> ${text}`;
+        }, 80);
+
+        await delay(task.delay);
+        
+        // منطق خطای تصادفی
+        if (task.id === 'proxy_fetch' && randomErrorConfig.errorsTriggered < randomErrorConfig.errorCount) {
+            randomErrorConfig.errorsTriggered++;
+            clearInterval(spinnerInterval);
+            line.innerHTML = `<span class="error">[FAILED]</span> ${text}`;
+            const retryLine = document.createElement('p');
+            terminal.appendChild(retryLine);
+            await typeText(retryLine, `   ↳ ERR_PROXY_CONN_REFUSED. Re-routing...`);
+            await delay(500); // تاخیر برای نمایش خطا
+            terminal.removeChild(retryLine);
+            await runTask(task, randomErrorConfig); // تلاش مجدد
+            return; // خروج از این اجرا
+        }
+        
+        clearInterval(spinnerInterval);
+        line.innerHTML = `<span class="ok">[  OK  ]</span> ${text}`;
+        taskCounter++;
+        updateProgressBar();
+        terminal.scrollTop = terminal.scrollHeight;
+    }
+
+    async function startSequence() {
+        const titleLine = document.createElement('p');
+        titleLine.className = 'title';
+        terminal.appendChild(titleLine);
+        await typeText(titleLine, 'G.P.T. SECURE TUNNEL INTERFACE v5.1\n', 10);
+        
+        updateProgressBar();
+        const separator = document.createElement('p');
+        separator.textContent = '---------------------------------------------------';
+        terminal.appendChild(separator);
+        await delay(100);
+        
+        // تعیین تعداد خطای تصادفی
+        const randomErrorConfig = {
+            errorCount: Math.floor(Math.random() * 3), // 0, 1, or 2 errors
+            errorsTriggered: 0
+        };
+        
+        for (const task of tasks) {
+            await runTask(task, randomErrorConfig);
+        }
+
+        const separatorEnd = document.createElement('p');
+        separatorEnd.textContent = '---------------------------------------------------';
+        terminal.appendChild(separatorEnd);
+
+        await delay(100);
+        const finalLine = document.createElement('p');
+        finalLine.className = 'cursor';
+        terminal.appendChild(finalLine);
+        await typeText(finalLine, 'CONNECTION ESTABLISHED. Handing over to client...');
+        
+        // محو شدن و ریدایرکت نهایی
+        setTimeout(() => {
+            document.body.classList.add('fading-out');
+            setTimeout(() => {
+                window.location.href = "https://chat.sharedchat.cn/";
+            }, 500); // ریدایرکت بعد از پایان انیمیشن محو شدن
+        }, 400); // انتظار کوتاه قبل از شروع محو شدن
+    }
+
+    startSequence();
   </script>
 </body>
 </html>
