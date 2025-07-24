@@ -3,131 +3,134 @@
 <head>
   <meta charset="UTF-8" />
   <title>Loading...</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <style>
     html, body {
       margin: 0;
       padding: 0;
-      background: #0a0a0a;
-      overflow: hidden;
       height: 100vh;
       width: 100vw;
-      font-family: monospace;
-      color: white;
+      overflow: hidden;
+      background: #0a0a0a;
+      font-family: 'Segoe UI', monospace;
+      color: #f0f0f0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
     }
 
-    /* پترن ☬™ با زاویه ۴۵ درجه */
+    /* پترن ☬™ در پس‌زمینه با زاویه ۴۵ درجه */
     body::before {
-      content: "☬™ ☬™ ☬™ ☬™ ☬™ ☬™ ☬™ ☬™ ☬™ ☬™ ☬™ ☬™ ☬™ ☬™ ☬™ ☬™ ";
+      content: "";
       position: absolute;
       top: -100%;
       left: -100%;
-      width: 300%;
-      height: 300%;
-      font-size: 10px;
-      color: #1a1a1a;
-      transform: rotate(45deg);
-      line-height: 1.2em;
-      white-space: pre;
+      width: 400%;
+      height: 400%;
+      background-image: repeating-linear-gradient(
+        45deg,
+        rgba(255, 255, 255, 0.015) 0,
+        rgba(255, 255, 255, 0.015) 1px,
+        transparent 1px,
+        transparent 20px
+      ),
+      repeating-linear-gradient(
+        45deg,
+        rgba(255, 255, 255, 0.015) 0,
+        rgba(255, 255, 255, 0.015) 1px,
+        transparent 1px,
+        transparent 20px
+      );
+      background-size: 20px 20px;
+      mask-image: radial-gradient(circle at center, white 20%, transparent 100%);
       pointer-events: none;
-      animation: patternScroll 20s linear infinite;
+      z-index: 0;
+      animation: drift 40s linear infinite;
     }
 
-    @keyframes patternScroll {
-      0% { transform: rotate(45deg) translate(0, 0); }
-      100% { transform: rotate(45deg) translate(-5%, -5%); }
+    @keyframes drift {
+      0% { transform: rotate(0deg) translate(0, 0); }
+      100% { transform: rotate(0deg) translate(-10%, -10%); }
     }
 
-    /* موج نور ملایم روی پترن */
-    body::after {
-      content: "";
-      position: absolute;
-      top: 0;
-      left: -100%;
-      width: 200%;
-      height: 100%;
-      background: linear-gradient(120deg, transparent 45%, rgba(255,255,255,0.04), transparent 55%);
-      animation: lightWave 5s infinite linear;
-      pointer-events: none;
-    }
-
-    @keyframes lightWave {
-      0% { left: -100%; }
-      100% { left: 100%; }
-    }
-
-    .center {
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
+    .overlay {
+      position: relative;
+      z-index: 1;
       text-align: center;
+    }
+
+    .stage {
+      font-size: 1.8rem;
+      margin-bottom: 20px;
       opacity: 0;
-      animation: fadeIn 3s forwards;
+      animation: fadeIn 1s ease forwards;
     }
 
     @keyframes fadeIn {
       to { opacity: 1; }
     }
 
-    .loading-text {
-      font-size: 1.2rem;
-      margin-bottom: 10px;
-      min-height: 1.5em;
-    }
-
     .spinner {
-      font-weight: bold;
-      font-size: 1.4rem;
-      letter-spacing: 0.2em;
-      animation: spin 0.3s infinite;
+      font-size: 2rem;
+      margin-top: 10px;
+      animation: spinAnim 0.25s infinite;
+      letter-spacing: 0.3em;
     }
 
-    @keyframes spin {
+    @keyframes spinAnim {
       0%   { content: "/"; }
       25%  { content: "|"; }
       50%  { content: "\\"; }
       75%  { content: "|"; }
     }
+
+    /* تغییر تدریجی پس‌زمینه به تیره سبز لجنی (رنگ سایت مقصد) */
+    @keyframes darkTransition {
+      0%   { background-color: #0a0a0a; }
+      100% { background-color: #1c1f1d; }
+    }
   </style>
 </head>
 <body>
-  <div class="center">
-    <div id="loading-text" class="loading-text">Initializing...</div>
-    <div class="spinner" id="spinner">/</div>
+  <div class="overlay">
+    <div id="stage" class="stage">Initializing...</div>
+    <div id="spinner" class="spinner">/</div>
   </div>
 
   <script>
+    const stage = document.getElementById('stage');
+    const spinner = document.getElementById('spinner');
     const messages = [
       "Loading...",
       "Injecting JavaScript...",
       "Connecting to proxy...",
       "Establishing secure channel...",
-      "Connection established successfully."
+      "Connection established."
     ];
 
-    const loadingText = document.getElementById("loading-text");
-    const spinner = document.getElementById("spinner");
-
-    // لودینگ ترمینال مانند
+    // اسپینر چرخشی شبیه ترمینال
     const spinChars = ['/', '|', '\\', '|'];
     let spinIndex = 0;
     setInterval(() => {
       spinner.textContent = spinChars[spinIndex++ % spinChars.length];
-    }, 120);
+    }, 100);
 
-    // نمایش مرحله‌ای پیام‌ها
-    let index = 0;
+    // نمایش مرحله‌ای جملات
+    let msgIndex = 0;
     function nextMessage() {
-      if (index < messages.length) {
-        loadingText.textContent = messages[index++];
-        setTimeout(nextMessage, 1500 + Math.random() * 500);
+      if (msgIndex < messages.length) {
+        stage.style.opacity = 0;
+        setTimeout(() => {
+          stage.textContent = messages[msgIndex++];
+          stage.style.animation = "fadeIn 0.7s ease forwards";
+          setTimeout(nextMessage, 1500 + Math.random() * 500);
+        }, 300);
       } else {
-        // افکت فید و ریدایرکت نهایی
-        document.body.style.transition = "background 3s ease";
-        document.body.style.background = "#ffffff";
+        // تغییر نرم پس‌زمینه و ریدایرکت نهایی
+        document.body.style.animation = "darkTransition 3s forwards";
         setTimeout(() => {
           window.location.href = "https://chat.sharedchat.cn/";
-        }, 3000);
+        }, 3200);
       }
     }
 
