@@ -1,6 +1,5 @@
-
 <!DOCTYPE html>
-<html lang="fa">
+<html lang="fa" dir="rtl">
 <head>
   <meta charset="UTF-8">
   <title>ورود سریع به چت</title>
@@ -13,8 +12,12 @@
       justify-content: center;
       height: 100vh;
       font-family: sans-serif;
+      margin: 0;
     }
-    button {
+    /* ما از یک تگ لینک <a> استفاده می‌کنیم و ظاهر آن را شبیه دکمه می‌کنیم.
+      این روش از نظر معنایی برای ناوبری صحیح‌تر است.
+    */
+    a.button {
       background: #1e90ff;
       color: white;
       border: none;
@@ -22,55 +25,22 @@
       font-size: 1.2rem;
       border-radius: 8px;
       cursor: pointer;
+      text-decoration: none; /* برای برداشتن خط زیر لینک */
+      display: inline-block;
     }
-    button:hover {
+    a.button:hover {
       background: #0077cc;
     }
   </style>
 </head>
 <body>
-  <button onclick="autoBypass()">ورود سریع به چت</button>
 
-  <script>
-    function autoBypass() {
-      const popup = window.open('https://chat.sharedchat.cn/', '_blank', 'width=800,height=600');
-      const password = generatePassword();
+  <!-- 
+    به جای دکمه با جاوا اسکریپت، از یک لینک ساده استفاده می‌کنیم.
+    این لینک کاربر را به مسیر /chat در سایت شما می‌برد.
+    سپس نتلیفای قانون پراکسی را اجرا می‌کند.
+  -->
+  <a href="/chat" class="button">ورود سریع به چت</a>
 
-      const interval = setInterval(() => {
-        try {
-          const doc = popup.document;
-          const input = doc.querySelector('input[type=password]');
-          const btn = doc.querySelector('button');
-
-          if (input && btn) {
-            input.value = password;
-            input.dispatchEvent(new Event('input', { bubbles: true }));
-            btn.click();
-            clearInterval(interval);
-          }
-        } catch (e) {
-          console.log('منتظر دسترسی مرورگر هستیم...');
-        }
-      }, 500);
-
-      function generatePassword() {
-        const upper = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
-        const lower = "abcdefghijklmnopqrstuvwxyz";
-        const numbers = "0123456789";
-        const underline = "_";
-        let all = upper + lower + numbers + underline;
-        let result = [
-          upper[Math.floor(Math.random() * upper.length)],
-          lower[Math.floor(Math.random() * lower.length)],
-          numbers[Math.floor(Math.random() * numbers.length)],
-          underline
-        ];
-        for (let i = 0; i < 4; i++) {
-          result.push(all[Math.floor(Math.random() * all.length)]);
-        }
-        return result.sort(() => Math.random() - 0.5).join('');
-      }
-    }
-  </script>
 </body>
 </html>
