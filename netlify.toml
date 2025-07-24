@@ -1,6 +1,0 @@
-[[redirects]]
-  from = "/*"
-  to = "https://chat.sharedchat.cn/:splat"
-  status = 200
-  force = true
-  headers = { Host = "chat.sharedchat.cn" }
