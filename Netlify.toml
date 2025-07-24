@@ -1,0 +1,8 @@
+[build]
+  publish = "."
+
+[[redirects]]
+  from = "/chat/*"
+  to = "https://chat.sharedchat.cn/:splat"
+  status = 200
+  force = true
