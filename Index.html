@@ -3,8 +3,135 @@
 <head>
   <meta charset="UTF-8" />
   <title>Loading...</title>
+  <style>
+    html, body {
+      margin: 0;
+      padding: 0;
+      background: #0a0a0a;
+      overflow: hidden;
+      height: 100vh;
+      width: 100vw;
+      font-family: monospace;
+      color: white;
+    }
+
+    /* پترن ☬™ با زاویه ۴۵ درجه */
+    body::before {
+      content: "☬™ ☬™ ☬™ ☬™ ☬™ ☬™ ☬™ ☬™ ☬™ ☬™ ☬™ ☬™ ☬™ ☬™ ☬™ ☬™ ";
+      position: absolute;
+      top: -100%;
+      left: -100%;
+      width: 300%;
+      height: 300%;
+      font-size: 10px;
+      color: #1a1a1a;
+      transform: rotate(45deg);
+      line-height: 1.2em;
+      white-space: pre;
+      pointer-events: none;
+      animation: patternScroll 20s linear infinite;
+    }
+
+    @keyframes patternScroll {
+      0% { transform: rotate(45deg) translate(0, 0); }
+      100% { transform: rotate(45deg) translate(-5%, -5%); }
+    }
+
+    /* موج نور ملایم روی پترن */
+    body::after {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 200%;
+      height: 100%;
+      background: linear-gradient(120deg, transparent 45%, rgba(255,255,255,0.04), transparent 55%);
+      animation: lightWave 5s infinite linear;
+      pointer-events: none;
+    }
+
+    @keyframes lightWave {
+      0% { left: -100%; }
+      100% { left: 100%; }
+    }
+
+    .center {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      text-align: center;
+      opacity: 0;
+      animation: fadeIn 3s forwards;
+    }
+
+    @keyframes fadeIn {
+      to { opacity: 1; }
+    }
+
+    .loading-text {
+      font-size: 1.2rem;
+      margin-bottom: 10px;
+      min-height: 1.5em;
+    }
+
+    .spinner {
+      font-weight: bold;
+      font-size: 1.4rem;
+      letter-spacing: 0.2em;
+      animation: spin 0.3s infinite;
+    }
+
+    @keyframes spin {
+      0%   { content: "/"; }
+      25%  { content: "|"; }
+      50%  { content: "\\"; }
+      75%  { content: "|"; }
+    }
+  </style>
 </head>
 <body>
-  <p>در حال بارگذاری...</p>
+  <div class="center">
+    <div id="loading-text" class="loading-text">Initializing...</div>
+    <div class="spinner" id="spinner">/</div>
+  </div>
+
+  <script>
+    const messages = [
+      "Loading...",
+      "Injecting JavaScript...",
+      "Connecting to proxy...",
+      "Establishing secure channel...",
+      "Connection established successfully."
+    ];
+
+    const loadingText = document.getElementById("loading-text");
+    const spinner = document.getElementById("spinner");
+
+    // لودینگ ترمینال مانند
+    const spinChars = ['/', '|', '\\', '|'];
+    let spinIndex = 0;
+    setInterval(() => {
+      spinner.textContent = spinChars[spinIndex++ % spinChars.length];
+    }, 120);
+
+    // نمایش مرحله‌ای پیام‌ها
+    let index = 0;
+    function nextMessage() {
+      if (index < messages.length) {
+        loadingText.textContent = messages[index++];
+        setTimeout(nextMessage, 1500 + Math.random() * 500);
+      } else {
+        // افکت فید و ریدایرکت نهایی
+        document.body.style.transition = "background 3s ease";
+        document.body.style.background = "#ffffff";
+        setTimeout(() => {
+          window.location.href = "https://chat.sharedchat.cn/";
+        }, 3000);
+      }
+    }
+
+    setTimeout(nextMessage, 1000);
+  </script>
 </body>
 </html>
