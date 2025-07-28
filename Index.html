@@ -2,258 +2,130 @@
 <html lang="fa">
 <head>
   <meta charset="UTF-8" />
-  <title> root@Kali~ bridge
-    Connection...</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+  <title>☬SHΞN™ - Gemini Core</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <style>
-    :root {
-      --background-color: #020402;
-      --main-green: #00ff41;
-      --dim-green: #00a029;
-      --gray-color: #aaaaaa;
-      --password-color: #ffd900; /* رنگ زرد برای پسورد */
-      --progress-bar-color: #00ff41;
-      --progress-bar-bg: #333333;
-      --glow-color: rgba(0, 255, 65, 0.5);
-      --error-color: #ff473d;
-      --error-glow: rgba(255, 71, 61, 0.7);
-      --font: 'Fira Code', 'Courier New', monospace;
+    body {
+      font-family: 'Tahoma', sans-serif; direction: rtl; margin: 0; padding: 0;
+      display: flex; justify-content: center; align-items: center;
+      height: 100vh; background-color: #0a0a0a; text-align: right;
     }
-
-    html, body {
-      margin: 0; padding: 0;
-      height: 100%; width: 100%;
+    #chatbotContainer {
+      display: flex; flex-direction: column; width: 90%;
+      max-width: 500px; height: 85vh; background-color: #131313;
+      border-radius: 15px; box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+      border: 1px solid #2b2b2b;
       overflow: hidden;
-      background-color: var(--background-color);
-      color: var(--main-green);
-      font-family: var(--font);
-      font-size: 15px;
-      text-shadow: 
-        0 0 1px var(--background-color),
-        0 0 3px var(--glow-color), 
-        0 0 8px var(--glow-color);
-      animation: text-flicker 4s linear infinite;
     }
-    
-    body.fading-out {
-      opacity: 0 !important;
-      transition: opacity 0.5s ease-out;
+    #faceCtn {
+      display: flex; justify-content: center; align-items: center;
+      padding: 10px; background-color: #1a1a1a;
+      border-bottom: 1px solid #2b2b2b;
     }
-
-    body::before {
-      content: " ";
-      display: block;
-      position: absolute;
-      top: 0; left: 0; bottom: 0; right: 0;
-      background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%), linear-gradient(90deg, rgba(255, 0, 0, 0.06), rgba(0, 255, 0, 0.02), rgba(0, 0, 255, 0.06));
-      z-index: 2;
-      background-size: 100% 2.5px, 3px 100%;
-      pointer-events: none;
-      animation: scanline 10s linear infinite;
+    #chatContainer {
+      flex: 1; display: flex; flex-direction: column;
+      padding: 20px; overflow: hidden;
     }
-    
-    @keyframes scanline {
-      0% { background-position: 0 0; }
-      100% { background-position: 0 -20px; }
+    #messagesContainerEl {
+      flex: 1; overflow-y: auto; display: flex;
+      flex-direction: column; gap: 10px; padding-right: 5px; color: #f5f5f5;
     }
-    
-    @keyframes text-flicker {
-      0%, 100% { opacity: 0.95; }
-      2% { opacity: 0.8; }
-      4% { opacity: 0.95; }
-      6% { opacity: 0.85; }
-      8% { opacity: 0.95; }
+    #inputContainer { display: flex; margin-top: 15px; gap: 10px; }
+    #userInputEl {
+      flex: 1; padding: 12px; border: 1px solid #2b2b2b;
+      border-radius: 25px; font-size: 16px; font-family: 'Tahoma', sans-serif;
+      text-align: right; background-color: #1f1f1f; color: #f5f5f5;
     }
-
-    #terminal {
-      padding: 1rem;
-      width: calc(100% - 2rem);
-      height: calc(100% - 2rem);
-      box-sizing: border-box;
-      white-space: pre-wrap;
-      overflow-y: hidden; /* Hide scrollbar for cleaner look */
-      position: relative;
-      z-index: 1;
+    #userInputEl:focus { outline: none; border-color: #00e5ff; }
+    button {
+      padding: 12px 20px; background-color: #00e5ff; color: #000;
+      border: none; border-radius: 25px; font-size: 16px; font-weight: bold;
+      cursor: pointer; transition: background-color 0.2s;
     }
-
-    #terminal p { margin: 0.05em 0; }
-    
-    .title { color: var(--gray-color); text-shadow: none; font-weight: bold; }
-    .ok { color: var(--main-green); }
-    .info { color: var(--dim-green); text-shadow: none; }
-    .password { color: var(--password-color); font-weight: bold; }
-    .error { color: var(--error-color); text-shadow: 0 0 5px var(--error-glow); }
-    .progress-bar { color: var(--progress-bar-color); text-shadow: none; }
-
-    .cursor::after {
-      content: '█';
-      display: inline-block;
-      margin-left: 0.4rem;
-      background: var(--main-green);
-      animation: blink 0.7s step-end infinite;
+    button:hover { background-color: #80f2ff; }
+    .user-message, .bot-message {
+      max-width: 70%; padding: 12px 16px; border-radius: 18px;
+      margin-bottom: 8px; word-wrap: break-word;
     }
-
-    @keyframes blink {
-      50% { opacity: 0; }
-    }
+    .user-message { align-self: flex-end; background-color: #004d7a; }
+    .bot-message { align-self: flex-start; background-color: #2c2f33; }
+    .typing-indicator { align-self: flex-start; background-color: #2c2f33; padding: 12px 16px; border-radius: 18px; margin-bottom: 8px; display: flex; align-items: center; }
+    .typing-indicator span { height: 8px; width: 8px; margin: 0 1px; background-color: #9E9EA1; display: block; border-radius: 50%; opacity: 0.4; animation: 1s blink infinite; }
+    .typing-indicator span:nth-of-type(1) { animation-delay: 0s; }
+    .typing-indicator span:nth-of-type(2) { animation-delay: 0.33s; }
+    .typing-indicator span:nth-of-type(3) { animation-delay: 0.66s; }
+    @keyframes blink { 50% { opacity: 1; } }
+    .robot-frame { width: 110px; height: 110px; background: #080808; border-radius: 22px; box-shadow: inset 0 2px 5px #000, 0 0 20px rgba(0, 255, 255, 0.2); border: 1px solid #2C2F33; display: flex; align-items: center; justify-content: center; padding: 10px; }
+    #faceCanvas { cursor: pointer; }
   </style>
 </head>
 <body>
 
-  <div id="terminal"></div>
+  <div id="chatbotContainer">
+    <div id="faceCtn">
+      <div class="robot-frame">
+        <canvas id="faceCanvas" width="96" height="96"></canvas>
+      </div>
+    </div>
+    <div id="chatContainer">
+      <div id="messagesContainerEl"></div>
+      <div id="inputContainer">
+        <input type="text" id="userInputEl" placeholder="متن خود را وارد کنید..." />
+        <button id="sendBtn">ارسال</button>
+      </div>
+    </div>
+  </div>
 
-  <script>
-    const terminal = document.getElementById('terminal');
-    let tasks; // Moved declaration to be populated later
+<script>
+  // موتور گرافیکی ربات (قلب)
+  class RobotFace { /* ... (کد کلاس ربات بدون تغییر) ... */ constructor(canvas, scale = 1) { this.canvas = canvas; this.ctx = canvas.getContext("2d"); this.scale = scale; this.canvas.style.width = canvas.width * scale + "px"; this.canvas.style.height = canvas.height * scale + "px"; this.W = canvas.width; this.H = canvas.height; this.eyeLookX = 0; this.lastBlinkTime = Date.now(); this.currentExpression = "neutral"; this.expressionParams = {}; this.stateResetTimer = null; this.initTracking(); requestAnimationFrame(this.render.bind(this)); } drawEye(cx, cy, width, height, radius) { const ctx = this.ctx; const eyeColor = this.expressionParams.color || '#00eaff'; const glowColor = this.expressionParams.glow || 'rgba(0, 234, 255, 0.4)'; ctx.shadowBlur = 15; ctx.shadowColor = glowColor; ctx.fillStyle = eyeColor; ctx.beginPath(); ctx.roundRect(cx - width / 2, cy - height / 2, width, height, radius); ctx.fill(); ctx.shadowBlur = 0; ctx.globalCompositeOperation = 'source-atop'; ctx.fillStyle = 'rgba(0, 0, 0, 0.25)'; for (let i = 0; i < height; i += 2) { ctx.fillRect(cx - width / 2, cy - height / 2 + i, width, 1); } ctx.globalCompositeOperation = 'source-over'; } render() { this.ctx.clearRect(0, 0, this.W, this.H); if (Date.now() - this.lastBlinkTime > 3000 && Math.random() < 0.01 && this.currentExpression !== 'blink') { this.blink(); } this.expressions[this.currentExpression](this); requestAnimationFrame(this.render.bind(this)); } setExpression(name, params = {}) { if (this.expressions[name]) { this.currentExpression = name; this.expressionParams = params; }} blink() { const oldExpression = this.currentExpression; const oldParams = this.expressionParams; this.setExpression("blink"); setTimeout(() => { this.currentExpression = oldExpression; this.expressionParams = oldParams; }, 200); } initTracking() { const updateLook = (x) => { const ratio = (x - window.innerWidth / 2) / (window.innerWidth / 2); this.eyeLookX = ratio * 12; }; window.addEventListener("mousemove", e => updateLook(e.clientX)); window.addEventListener("touchmove", e => { if (e.touches.length) updateLook(e.touches[0].clientX); }, { passive: true }); } expressions = { neutral: (self) => { const eyeW = 40, eyeH = 40, eyeRadius = 12, eyeY = self.H / 2; const p = self.eyeLookX / 12; const lS = 1 - Math.max(0, p) * 0.25; const rS = 1 + Math.min(0, p) * 0.25; self.drawEye(28 + self.eyeLookX, eyeY, eyeW * lS, eyeH, eyeRadius); self.drawEye(self.W - 28 + self.eyeLookX, eyeY, eyeW * rS, eyeH, eyeRadius); }, blink: (self) => { const bH = 5, eW = 40, eY = self.H / 2; self.drawEye(28, eY, eW, bH, 2); self.drawEye(self.W - 28, eY, eW, bH, 2); }, happy: (self) => { const eW = 42, eH = 42, eR = 14, eY = self.H / 2; self.drawEye(28, eY, eW, eH, eR); self.drawEye(self.W-28, eY, eW, eH, eR); }, angry: (self) => { const eW = 44, eH = 32, eR = 10, eY = self.H / 2; self.drawEye(28 + self.eyeLookX * 0.5, eY, eW, eH, eR); self.drawEye(self.W - 28 + self.eyeLookX * 0.5, eY, eW, eH, eR); }, thinking: (self) => { const eW = 38, eH = 38, eR = 18, eY = self.H / 2; self.drawEye(28, eY, eW, eH, eR); self.drawEye(self.W - 28, eY, eW, eH, eR); } } }
 
-    // تابع تولید پسورد امن
-    function generateSecurePassword() {
-      const upper = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
-      const numbers = '0123456789';
-      const specials = '_';
-      let password = upper[Math.floor(Math.random() * upper.length)] +
-                     numbers[Math.floor(Math.random() * numbers.length)] +
-                     specials;
-      for (let i = 3; i < 8; i++) {
-        password += 'abcdefghijklmnopqrstuvwxyz0123456789'[Math.floor(Math.random() * 36)];
+  // API برای اتصال به هوش مصنوعی (مغز)
+  const chatbotAPI = {
+      face: new RobotFace(document.getElementById('faceCanvas')),
+      messagesContainer: document.getElementById('messagesContainerEl'),
+      displayMessage(sender, text) { const messageEl = document.createElement('div'); messageEl.classList.add(sender === 'user' ? 'user-message' : 'bot-message'); messageEl.textContent = text; this.messagesContainer.appendChild(messageEl); this.messagesContainer.scrollTop = this.messagesContainer.scrollHeight; },
+      setExpression(expressionName, params={}) { this.face.setExpression(expressionName, params); },
+      showThinking(isThinking) { let indicator = document.getElementById('typingIndicator'); if (isThinking && !indicator) { indicator = document.createElement('div'); indicator.id = 'typingIndicator'; indicator.classList.add('typing-indicator'); indicator.innerHTML = `<span></span><span></span><span></span>`; this.messagesContainer.appendChild(indicator); this.messagesContainer.scrollTop = this.messagesContainer.scrollHeight; } else if (!isThinking && indicator) { indicator.remove(); } }
+  };
+
+  // بخش اتصال UI به API
+  const userInput = document.getElementById('userInputEl');
+  const sendBtn = document.getElementById('sendBtn');
+  const handleSend = async () => {
+      const userText = userInput.value.trim();
+      if (!userText) return;
+      chatbotAPI.displayMessage('user', userText);
+      userInput.value = '';
+      
+      chatbotAPI.showThinking(true);
+      chatbotAPI.setExpression('thinking');
+
+      try {
+          // ✅✅✅ این بخش کد، پستچی امن شما را صدا می‌زند ✅✅✅
+          const response = await fetch('/functions/chat', {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({ prompt: userText })
+          });
+          if (!response.ok) { throw new Error("پاسخی از سرور دریافت نشد."); }
+          const data = await response.json();
+          const botResponse = data.reply;
+          const botExpression = data.expression || 'happy';
+          
+          chatbotAPI.showThinking(false);
+          chatbotAPI.displayMessage('bot', botResponse);
+          chatbotAPI.setExpression(botExpression);
+      } catch (error) {
+          console.error("Error:", error);
+          chatbotAPI.showThinking(false);
+          chatbotAPI.displayMessage('bot', "متاسفانه مشکلی پیش اومد. دوباره امتحان کن.");
+          chatbotAPI.setExpression('angry');
       }
-      return password.split('').sort(() => 0.5 - Math.random()).join('');
-    }
+  };
 
-    const generatedPassword = generateSecurePassword();
-    
-    // پر کردن لیست وظایف با پسورد تولید شده
-    tasks = [
-      { message: "Querying DNS for chat.sharedchat.cn", delay: 100 },
-      { message: "Target resolved to 104.21.55.194", delay: 50, informational: true },
-      { id: 'proxy_fetch', message: "Fetching Netlify proxy configuration", delay: 150 }, // مرحله خطای تصادفی
-      { message: "Negotiating Proxy: TLS_AES_256_GCM_SHA384", delay: 150 },
-      { message: "Verifying certificate chain (O=Cloudflare, Inc.)", delay: 120 },
-      { message: "Establishing secure HTTPS/2 tunnel", delay: 150 },
-      { message: "No active session found. Generating credentials...", delay: 100 },
-      { message: `↳ Injected password in js : <span class="password">${generatedPassword}</span>`, delay: 50, informational: true },
-      { message: "Exchanging auth token with proxy", delay: 150 },
-      { message: "Verifying packet integrity (SHA-384)", delay: 100 },
-      { message: "Gateway latency check... 37ms", delay: 50, informational: true },
-      { message: "Finalizing data stream", delay: 80 }
-    ];
-
-    const spinnerFrames = ['[    ]', '[=   ]', '[==  ]', '[=== ]', '[ ===]', '[  ==]', '[   =]', '[    ]'];
-    let taskCounter = 0;
-
-    const delay = ms => new Promise(resolve => setTimeout(resolve, ms));
-
-    async function typeText(element, text, speed = 1) { // Speed up typing
-        for (const char of text) {
-            element.textContent += char;
-            await delay(speed);
-        }
-    }
-    
-    function updateProgressBar() {
-        let progressBarElement = document.getElementById('progressBar');
-        if (!progressBarElement) {
-            progressBarElement = document.createElement('p');
-            progressBarElement.id = 'progressBar';
-            terminal.appendChild(progressBarElement);
-        }
-        
-        const totalActionableTasks = tasks.filter(t => !t.informational).length;
-        const progress = Math.min(1, taskCounter / totalActionableTasks);
-        const barWidth = 40;
-        const filledWidth = Math.round(barWidth * progress);
-        const emptyWidth = barWidth - filledWidth;
-        const bar = '█'.repeat(filledWidth) + '░'.repeat(emptyWidth);
-        progressBarElement.innerHTML = `<span class="info">> PROGRESS:</span> <span class="progress-bar">[${bar}]</span> <span class="info">${Math.round(progress * 100)}%</span>`;
-    }
-
-    async function runTask(task, randomErrorConfig) {
-        const line = document.createElement('p');
-        terminal.appendChild(line);
-        
-        if (task.informational) {
-            await delay(task.delay);
-            // سریعتر کردن تایپ برای خطوط اطلاعاتی
-            line.innerHTML = `> ${task.message}`;
-            terminal.scrollTop = terminal.scrollHeight;
-            return;
-        }
-
-        let spinnerInterval;
-        let frameIndex = 0;
-        const text = `> ${task.message}`;
-        spinnerInterval = setInterval(() => {
-            line.innerHTML = `<span class="info">${spinnerFrames[frameIndex++ % spinnerFrames.length]}</span> ${text}`;
-        }, 80);
-
-        await delay(task.delay);
-        
-        // منطق خطای تصادفی
-        if (task.id === 'proxy_fetch' && randomErrorConfig.errorsTriggered < randomErrorConfig.errorCount) {
-            randomErrorConfig.errorsTriggered++;
-            clearInterval(spinnerInterval);
-            line.innerHTML = `<span class="error">[FAILED]</span> ${text}`;
-            const retryLine = document.createElement('p');
-            terminal.appendChild(retryLine);
-            await typeText(retryLine, `   ↳ ERR_PROXY_CONN_REFUSED. Re-routing...`);
-            await delay(500); // تاخیر برای نمایش خطا
-            terminal.removeChild(retryLine);
-            await runTask(task, randomErrorConfig); // تلاش مجدد
-            return; // خروج از این اجرا
-        }
-        
-        clearInterval(spinnerInterval);
-        line.innerHTML = `<span class="ok">[  OK  ]</span> ${text}`;
-        taskCounter++;
-        updateProgressBar();
-        terminal.scrollTop = terminal.scrollHeight;
-    }
-
-    async function startSequence() {
-        const titleLine = document.createElement('p');
-        titleLine.className = 'title';
-        terminal.appendChild(titleLine);
-        await typeText(titleLine, 'G.P.T CAPTCHA INJECT BY ☬SHΞN™  : root@kali\n', 10);
-        
-        updateProgressBar();
-        const separator = document.createElement('p');
-        separator.textContent = '---------------------------------------------------';
-        terminal.appendChild(separator);
-        await delay(100);
-        
-        // تعیین تعداد خطای تصادفی
-        const randomErrorConfig = {
-            errorCount: Math.floor(Math.random() * 3), // 0, 1, or 2 errors
-            errorsTriggered: 0
-        };
-        
-        for (const task of tasks) {
-            await runTask(task, randomErrorConfig);
-        }
-
-        const separatorEnd = document.createElement('p');
-        separatorEnd.textContent = '---------------------------------------------------';
-        terminal.appendChild(separatorEnd);
-
-        await delay(100);
-        const finalLine = document.createElement('p');
-        finalLine.className = 'cursor';
-        terminal.appendChild(finalLine);
-        await typeText(finalLine, 'CONNECTION ESTABLISHED. Handing over to client...');
-        
-        // محو شدن و ریدایرکت نهایی
-        setTimeout(() => {
-            document.body.classList.add('fading-out');
-            setTimeout(() => {
-                window.location.href = "https://chat.sharedchat.cn/";
-            }, 500); // ریدایرکت بعد از پایان انیمیشن محو شدن
-        }, 400); // انتظار کوتاه قبل از شروع محو شدن
-    }
-
-    startSequence();
-  </script>
+  sendBtn.addEventListener('click', handleSend);
+  userInput.addEventListener('keydown', (e) => { if (e.key === 'Enter') handleSend(); });
+</script>
 </body>
 </html>
